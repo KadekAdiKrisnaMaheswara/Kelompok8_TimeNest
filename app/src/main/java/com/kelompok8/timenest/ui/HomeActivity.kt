@@ -1,10 +1,12 @@
-package com.kelompok8.timenest.ui.home
+package com.kelompok8.timenest.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kelompok8.timenest.databinding.ActivityHomeBinding
 import com.kelompok8.timenest.data.DatabaseHelper
+import com.kelompok8.timenest.ui.home.CategoryAdapter
+import com.kelompok8.timenest.ui.home.TaskAdapter
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding

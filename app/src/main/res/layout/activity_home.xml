@@ -6,18 +6,18 @@
     android:background="#FDFDFD"
     tools:context=".ui.home.HomeActivity">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
+    <!-- Scrollable Content -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNav"
+        android:layout_above="@id/bottomNav"
         android:padding="24dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="100dp">
+            android:paddingBottom="80dp">
 
             <!-- Header -->
             <LinearLayout
@@ -79,33 +79,129 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerCategories"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never" />
+                android:layout_height="wrap_content">
+
+                <!-- Card 1 -->
+                <LinearLayout
+                    android:background="#FFEEF5"
+                    android:layout_marginBottom="12dp"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:text="Primary Task"
+                        android:textSize="16sp"
+                        android:textColor="#2D2D2D"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="7 Tasks"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/rounded_black_button"
+                        android:padding="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- Card 2 -->
+                <LinearLayout
+                    android:background="#E9FFE9"
+                    android:layout_marginBottom="12dp"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:text="Personal"
+                        android:textSize="16sp"
+                        android:textColor="#2D2D2D"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="5 Tasks"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/rounded_black_button"
+                        android:padding="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+                <!-- Card 3 -->
+                <LinearLayout
+                    android:background="#E6F2FF"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:text="Daily"
+                        android:textSize="16sp"
+                        android:textColor="#2D2D2D"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:text="6 Tasks"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/rounded_black_button"
+                        android:padding="6dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- Ongoing Task -->
             <TextView
                 android:text="Ongoing tasks"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp"
                 android:textColor="#2D2D2D"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTasks"
+            <LinearLayout
+                android:layout_marginBottom="12dp"
+                android:padding="16dp"
+                android:background="#F6E9F0"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Wallet App Design"
+                    android:textSize="16sp"
+                    android:textColor="#2D2D2D"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="12 June 2025"
+                    android:textSize="12sp"
+                    android:textColor="#B3445A"
+                    android:layout_marginTop="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
     <!-- Bottom Navigation -->
     <LinearLayout
