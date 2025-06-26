@@ -11,7 +11,7 @@ import com.kelompok8.timenest.model.Task
 class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.add_task, parent, false)
         return TaskViewHolder(view)
     }
 

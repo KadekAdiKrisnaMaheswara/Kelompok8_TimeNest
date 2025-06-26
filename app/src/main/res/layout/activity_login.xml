@@ -98,6 +98,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvRegister"
             android:text="Don't have an account? Register Now"
             android:textColor="#0CB9C1"
             android:textSize="14sp"

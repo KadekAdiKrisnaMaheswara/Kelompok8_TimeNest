@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_sort_by_size" />
+
+        <TextView
+            android:text="Add Task"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_search" />
+    </LinearLayout>
+
+    <!-- Form Background -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="#EBDCF9"
+        android:layout_marginBottom="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:elevation="2dp"
+        android:clipToPadding="false"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp">
+
+        <!-- Title -->
+        <TextView
+            android:text="Title"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:layout_marginBottom="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:hint="Task Title"
+            android:background="@drawable/rounded_input"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- End Task -->
+        <TextView
+            android:text="End Task"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_input" />
+
+        <!-- Start and End Time -->
+        <TextView
+            android:text="Start Time             End Time"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2">
+
+            <Spinner
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_input" />
+
+            <Spinner
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_input" />
+        </LinearLayout>
+
+        <!-- Remind -->
+        <TextView
+            android:text="Remind"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_input" />
+
+        <!-- Create Task Button -->
+        <Button
+            android:text="Create a Task"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#B89DD5"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>

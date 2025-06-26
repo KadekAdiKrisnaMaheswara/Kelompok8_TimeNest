@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation ("com.google.android.material:material:1.10.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

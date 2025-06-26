@@ -1,156 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
-    tools:context=".ui.home.HomeActivity">
+    android:background="#F9F9F9"
+    android:padding="24dp">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNav"
-        android:padding="24dp">
+        android:layout_height="wrap_content">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Hi, Kelompok 8!"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="#1A1A1A"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:text="18 tasks pending"
+                    android:textSize="14sp"
+                    android:textColor="#888888"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:background="@drawable/rounded_purple_chip"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profil" />
+        </LinearLayout>
+
+        <!-- Search -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:hint="Search"
+                android:background="@drawable/rounded_input"
+                android:padding="12dp" />
+
+            <ImageButton
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_settings"
+                android:background="@drawable/rounded_input"
+                android:layout_marginStart="12dp" />
+        </LinearLayout>
+
+        <!-- Categories -->
+        <TextView
+            android:text="Categories"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="vertical"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="100dp">
+            android:layout_height="wrap_content">
 
-            <!-- Header -->
+            <!-- Category: Primary -->
             <LinearLayout
+                android:background="#EBDCF9"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="space-between">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Hi, Kelompok 8!"
-                    android:textSize="22sp"
+                    android:text="Primary Task"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#2D2D2D" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/sticky_note"
-                    android:scaleType="centerCrop"
-                    android:layout_marginStart="8dp" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="18 tasks pending"
-                android:textSize="14sp"
-                android:textColor="#888888"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Search -->
+            <!-- Category: Personal -->
             <LinearLayout
+                android:background="#D8F4DD"
                 android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:gravity="space-between">
 
-                <EditText
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:hint="Search"
-                    android:background="@drawable/rounded_input"
-                    android:padding="12dp"
-                    android:textColorHint="#999999" />
+                <TextView
+                    android:text="Personal"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
-            <!-- Categories -->
-            <TextView
-                android:text="Categories"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="#2D2D2D"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerCategories"
+            <!-- Category: Daily -->
+            <LinearLayout
+                android:background="#D5E8F9"
+                android:orientation="horizontal"
+                android:padding="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never" />
+                android:gravity="space-between">
 
-            <!-- Ongoing Task -->
-            <TextView
-                android:text="Ongoing tasks"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
-                android:textColor="#2D2D2D"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:text="Daily"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTasks"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never" />
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#EFD9F9"
-        android:gravity="center">
+        <!-- Ongoing Tasks -->
+        <TextView
+            android:text="Ongoing tasks"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/home"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/navCalendar"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/calender"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
+            <!-- Task 1 -->
+            <LinearLayout
+                android:background="#F4EDF8"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/navAdd"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
+                <TextView
+                    android:text="Wallet App Design"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/navProfile"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profil"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
+                <TextView
+                    android:text="12 June 2025"
+                    android:textSize="12sp"
+                    android:textColor="#888888"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp" />
+
+            </LinearLayout>
+
+            <!-- Task 2 -->
+            <LinearLayout
+                android:background="#D8F4DD"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="write a journal"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>
