@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFDFD"
-    tools:context=".ui.home.HomeActivity">
+    android:background="#FDFDFD">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomNav"
         android:padding="24dp">
 
         <LinearLayout
@@ -107,50 +104,4 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation -->
-    <LinearLayout
-        android:id="@+id/bottomNav"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#EFD9F9"
-        android:gravity="center">
-
-        <ImageView
-            android:id="@+id/navHome"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/home"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
-
-        <ImageView
-            android:id="@+id/navCalendar"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/calender"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
-
-        <ImageView
-            android:id="@+id/navAdd"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
-
-        <ImageView
-            android:id="@+id/navProfile"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@drawable/profil"
-            android:tint="#7B4B94"
-            android:padding="12dp" />
-    </LinearLayout>
 </RelativeLayout>

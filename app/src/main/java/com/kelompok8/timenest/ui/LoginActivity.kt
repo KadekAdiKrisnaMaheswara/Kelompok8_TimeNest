@@ -1,5 +1,6 @@
 package com.kelompok8.timenest.ui
 
+import com.kelompok8.timenest.ui.home.DashboardActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -25,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
             if (email == "admin@mail.com" && password == "admin123") {
                 Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, DashboardActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {

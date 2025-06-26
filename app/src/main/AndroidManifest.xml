@@ -38,6 +38,7 @@
             android:name=".ui.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-    </application>
 
+        <activity android:name=".ui.home.DashboardActivity" />
+    </application>
 </manifest>

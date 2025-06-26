@@ -1,4 +1,4 @@
-package com.kelompok8.timenest.ui
+package com.kelompok8.timenest.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.kelompok8.timenest.R
 
-class TaskFragment : Fragment() {
-
+class CalendarFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.task_fragment, container, false)
+        return inflater.inflate(R.layout.calendar_fragment, container, false)
     }
 }
