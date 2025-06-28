@@ -11,7 +11,7 @@ import com.kelompok8.timenest.model.Task
 class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.task_fragment, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(view)
     }
 
@@ -19,6 +19,7 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
         val task = tasks[position]
         holder.taskTitle.text = task.name
         holder.taskDate.text = task.dueDate
+        holder.taskTime.text = "${task.startTime} - ${task.endTime}"
     }
 
     override fun getItemCount(): Int = tasks.size
@@ -26,5 +27,6 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskTitle: TextView = itemView.findViewById(R.id.tvTaskTitle)
         val taskDate: TextView = itemView.findViewById(R.id.tvTaskDate)
+        val taskTime: TextView = itemView.findViewById(R.id.tvTaskTime)
     }
 }

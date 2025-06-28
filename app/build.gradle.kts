@@ -35,8 +35,11 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        compose = false
-        viewBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.10" // atau versi yang sesuai
     }
 }
 
@@ -54,6 +57,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation ("com.google.android.material:material:1.10.0")
+    implementation ("com.android.volley:volley:1.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

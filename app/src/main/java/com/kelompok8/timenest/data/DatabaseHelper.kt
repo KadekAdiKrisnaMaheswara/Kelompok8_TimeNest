@@ -104,12 +104,35 @@ class DatabaseHelper(context: Context) :
             do {
                 val name = cursor.getString(cursor.getColumnIndexOrThrow("task_name"))
                 val dueDate = cursor.getString(cursor.getColumnIndexOrThrow("due_date"))
-                list.add(Task(name, dueDate))
+                val startTime = cursor.getString(cursor.getColumnIndexOrThrow("start_time"))
+                val endTime = cursor.getString(cursor.getColumnIndexOrThrow("end_time"))
+
+                list.add(Task(name, dueDate, startTime, endTime))
             } while (cursor.moveToNext())
         }
 
         cursor.close()
         return list
+    }
+
+    fun insertTask(title: String, dueDate: String, startTime: String, endTime: String, remind: String): Boolean {
+        val db = writableDatabase
+        val query = """
+        INSERT INTO $TABLE_TASK (task_name, due_date, reminder_time, description, priority_level, status)
+        VALUES (?, ?, ?, '', 'Medium', 'Not Done')
+    """.trimIndent()
+
+        return try {
+            val stmt = db.compileStatement(query)
+            stmt.bindString(1, title)
+            stmt.bindString(2, dueDate)
+            stmt.bindString(3, "$startTime - $endTime")
+            stmt.executeInsert()
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 
     companion object {

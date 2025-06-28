@@ -1,14 +1,15 @@
 package com.kelompok8.timenest.ui
 
-import com.kelompok8.timenest.ui.home.DashboardActivity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.kelompok8.timenest.R
+import com.android.volley.Request
+import com.android.volley.Response
+import com.kelompok8.timenest.ui.home.DashboardActivity
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,22 +22,43 @@ class LoginActivity : AppCompatActivity() {
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
-            val email = etEmail.text.toString()
-            val password = etPassword.text.toString()
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
 
-            if (email == "admin@mail.com" && password == "admin123") {
-                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-                finish()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email dan password wajib diisi", Toast.LENGTH_SHORT).show()
+                btnLogin.isEnabled = true
+                return@setOnClickListener
             } else {
-                Toast.makeText(this, "Email atau password salah", Toast.LENGTH_SHORT).show()
+                val url = "http://10.0.2.2/timenest_api/login.php"
+
+                val stringRequest = object : StringRequest(Request.Method.POST, url,
+                    Response.Listener { response ->
+                        if (response == "success") {
+                            Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, DashboardActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this, "Login gagal: $response", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    Response.ErrorListener { error ->
+                        Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }) {
+                    override fun getParams(): Map<String, String> {
+                        return mapOf(
+                            "email" to email,
+                            "password" to password
+                        )
+                    }
+                }
+
+                Volley.newRequestQueue(this).add(stringRequest)
             }
         }
 
         tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }

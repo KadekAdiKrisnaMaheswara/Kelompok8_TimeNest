@@ -60,6 +60,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
+            android:id="@+id/task_title_input"
             android:hint="Task Title"
             android:background="@drawable/rounded_input"
             android:padding="12dp"
@@ -76,13 +77,14 @@
             android:layout_height="wrap_content" />
 
         <Spinner
+            android:id="@+id/end_task_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_input" />
 
         <!-- Start and End Time -->
         <TextView
-            android:text="Start Time             End Time"
+            android:text="Start Time                        End Time"
             android:layout_marginTop="16dp"
             android:textSize="14sp"
             android:layout_width="wrap_content"
@@ -96,6 +98,7 @@
             android:weightSum="2">
 
             <Spinner
+                android:id="@+id/start_time_spinner"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -103,6 +106,7 @@
                 android:background="@drawable/rounded_input" />
 
             <Spinner
+                android:id="@+id/end_time_spinner"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -118,6 +122,7 @@
             android:layout_height="wrap_content" />
 
         <Spinner
+            android:id="@+id/remind_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -125,12 +130,14 @@
 
         <!-- Create Task Button -->
         <Button
+            android:id="@+id/btn_create_task"
             android:text="Create a Task"
             android:layout_marginTop="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#B89DD5"
             android:textColor="#FFFFFF" />
+
     </LinearLayout>
 
 </LinearLayout>
