@@ -10,6 +10,8 @@ import com.kelompok8.timenest.R
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kelompok8.timenest.ui.home.DashboardActivity
+import android.text.Html
+import androidx.core.graphics.toColorInt
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,6 @@ class LoginActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
-        val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
@@ -57,6 +58,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        val text = "Don't have an account? Register Now"
+        val spannable = android.text.SpannableString(text)
+
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
         tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }

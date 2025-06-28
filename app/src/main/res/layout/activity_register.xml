@@ -3,21 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Register TimeNest"
+            android:text="Register"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="50dp" />
 
         <EditText
             android:id="@+id/etFullName"
@@ -25,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="40dp" />
 
         <EditText
             android:id="@+id/etEmail"
@@ -33,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="40dp" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -41,23 +43,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:layout_marginBottom="16dp" />
-
-        <EditText
-            android:id="@+id/etConfirmPassword"
-            android:hint="Confirm Password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="40dp" />
 
         <Button
             android:id="@+id/btnRegister"
             android:text="Register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#7B4B94"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"/>
 
     </LinearLayout>
 </ScrollView>

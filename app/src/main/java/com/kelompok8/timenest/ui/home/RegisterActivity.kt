@@ -18,19 +18,15 @@ class RegisterActivity : AppCompatActivity() {
         val fullName = findViewById<EditText>(R.id.etFullName)
         val email = findViewById<EditText>(R.id.etEmail)
         val password = findViewById<EditText>(R.id.etPassword)
-        val confirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
 
         btnRegister.setOnClickListener {
             val name = fullName.text.toString().trim()
             val mail = email.text.toString().trim()
             val pass = password.text.toString().trim()
-            val confirm = confirmPassword.text.toString().trim()
 
-            if (name.isEmpty() || mail.isEmpty() || pass.isEmpty() || confirm.isEmpty()) {
+            if (name.isEmpty() || mail.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Semua field wajib diisi", Toast.LENGTH_SHORT).show()
-            } else if (pass != confirm) {
-                Toast.makeText(this, "Password tidak sama", Toast.LENGTH_SHORT).show()
             } else {
                 val url = "http://10.0.2.2/timenest_api/register.php"
 

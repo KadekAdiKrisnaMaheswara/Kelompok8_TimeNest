@@ -14,7 +14,7 @@
                 android:startColor="#B07CCB"
                 android:endColor="#D9B4F0"
                 android:angle="45" />
-            <corners android:radius="6dp" />
+            <corners android:radius="10dp" />
         </shape>
     </item>
 </selector>
