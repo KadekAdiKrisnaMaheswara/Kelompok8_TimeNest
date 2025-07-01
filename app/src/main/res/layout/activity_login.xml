@@ -8,17 +8,17 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:padding="70dp"
+        android:padding="50dp"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:text="Welcome back! Glad to see you, Again!"
-            android:textSize="22sp"
+            android:textSize="28sp"
             android:textColor="#1A1A1A"
             android:textStyle="bold"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="40dp"
             android:layout_marginTop="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -28,17 +28,17 @@
             android:hint="Enter your email"
             android:inputType="textEmailAddress"
             android:background="@drawable/rounded_input"
-            android:padding="16dp"
+            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="20dp" />
 
         <EditText
             android:id="@+id/etPassword"
             android:hint="Enter your password"
             android:inputType="textPassword"
             android:background="@drawable/rounded_input"
-            android:padding="16dp"
+            android:padding="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp" />
@@ -58,11 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#FFFF"
+            android:background="@drawable/rounded_black_button"
             android:textSize="16sp"
             android:layout_marginTop="10dp"
-            android:padding="14dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/rounded_button" />
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
 
         <TextView
             android:text="──────────  Or Login with  ──────────"
