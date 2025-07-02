@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.kelompok8.timenest.R
-import com.kelompok8.timenest.ui.TaskFragment
+import com.kelompok8.timenest.ui.home.TaskFragment
+import com.kelompok8.timenest.ui.home.HomeFragment
+
 
 class DashboardActivity : AppCompatActivity() {
 

@@ -6,25 +6,23 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kelompok8.timenest.R
-import com.kelompok8.timenest.model.Category
 
-class CategoryAdapter(private val categories: List<Category>) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+class CategoryAdapter(private val categories: List<String>) :
+    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+
+    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val categoryName: TextView = view.findViewById(R.id.tvCategoryName)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_category, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_category, parent, false)
         return CategoryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = categories[position]
-        holder.categoryName.text = category.name
-        holder.taskCount.text = "${category.taskCount} Tasks"
+        holder.categoryName.text = categories[position]
     }
 
     override fun getItemCount(): Int = categories.size
-
-    class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val categoryName: TextView = itemView.findViewById(R.id.tvCategoryName)
-        val taskCount: TextView = itemView.findViewById(R.id.tvTaskCount)
-    }
 }

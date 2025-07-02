@@ -1,5 +1,6 @@
 package com.kelompok8.timenest.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -10,8 +11,7 @@ import com.kelompok8.timenest.R
 import com.android.volley.Request
 import com.android.volley.Response
 import com.kelompok8.timenest.ui.home.DashboardActivity
-import android.text.Html
-import androidx.core.graphics.toColorInt
+import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
+        val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString().trim()
@@ -35,12 +36,26 @@ class LoginActivity : AppCompatActivity() {
 
                 val stringRequest = object : StringRequest(Request.Method.POST, url,
                     Response.Listener { response ->
-                        if (response == "success") {
-                            Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this, DashboardActivity::class.java))
-                            finish()
-                        } else {
-                            Toast.makeText(this, "Login gagal: $response", Toast.LENGTH_SHORT).show()
+                        try {
+                            val jsonResponse = JSONObject(response)
+                            val status = jsonResponse.getString("status")
+
+                            if (status == "success") {
+                                val userId = jsonResponse.getInt("user_id")
+
+                                // Simpan user_id ke SharedPreferences
+                                val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                                sharedPref.edit().putInt("user_id", userId).apply()
+
+                                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this, DashboardActivity::class.java))
+                                finish()
+                            } else {
+                                val message = jsonResponse.optString("message", "Login gagal")
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(this, "Format respons tidak valid", Toast.LENGTH_SHORT).show()
                         }
                     },
                     Response.ErrorListener { error ->
@@ -58,10 +73,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        val text = "Don't have an account? Register Now"
-        val spannable = android.text.SpannableString(text)
-
-        val tvRegister = findViewById<TextView>(R.id.tvRegister)
         tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }

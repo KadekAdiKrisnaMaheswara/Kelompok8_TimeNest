@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#EBDCF9">
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/tvTaskTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Judul Tugas"
-        android:textSize="16sp"
+        android:text="Task Title"
         android:textStyle="bold"
-        android:textColor="#000000" />
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvTaskCategory"
+        android:text="Kategori: ..."
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <TextView
         android:id="@+id/tvTaskDate"
+        android:text="Tenggat: ..."
+        android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sabtu, 6 Juli 2025"
-        android:textSize="12sp"
-        android:textColor="#444444"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"/>
 
     <TextView
         android:id="@+id/tvTaskTime"
+        android:text="Jam: ..."
+        android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="08:00 - 09:00"
-        android:textSize="12sp"
-        android:textColor="#666666"
-        android:layout_marginTop="2dp" />
+        android:layout_marginTop="4dp"/>
+
+    <TextView
+        android:id="@+id/tvTaskRemind"
+        android:text="Ingatkan: ..."
+        android:textSize="14sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"/>
+
 </LinearLayout>
