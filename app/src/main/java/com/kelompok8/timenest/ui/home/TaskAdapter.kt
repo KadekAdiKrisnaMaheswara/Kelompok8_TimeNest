@@ -17,11 +17,12 @@ class TaskAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         val task = tasks[position]
-        holder.taskTitle.text = task.name
-        holder.taskDate.text = task.dueDate
+        holder.taskTitle.text = task.title
+        holder.taskDate.text = task.endDate
         holder.taskTime.text = "${task.startTime} - ${task.endTime}"
+        // Optional: Tampilkan reminder juga jika kamu ingin
+        // holder.taskRemind.text = task.remind
     }
-
     override fun getItemCount(): Int = tasks.size
 
     class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

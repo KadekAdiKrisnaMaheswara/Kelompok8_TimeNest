@@ -1,31 +1,29 @@
 package com.kelompok8.timenest.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.kelompok8.timenest.R
-import com.kelompok8.timenest.data.TaskData
-import com.kelompok8.timenest.model.Task
+import com.android.volley.Request
+import com.android.volley.Response
 
 class TaskFragment : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.task_fragment, container, false)
 
         val titleInput = view.findViewById<EditText>(R.id.task_title_input)
         val endTaskSpinner = view.findViewById<Spinner>(R.id.end_task_spinner)
         val startTimeSpinner = view.findViewById<Spinner>(R.id.start_time_spinner)
         val endTimeSpinner = view.findViewById<Spinner>(R.id.end_time_spinner)
-        val btnCreate = view.findViewById<Button>(R.id.btn_create_task)
-        val dates = listOf("Senin, 1 Juli", "Selasa, 2 Juli", "Rabu, 3 Juli")
-        val times = listOf("07:00", "08:00", "09:00", "10:00")
         val remindSpinner = view.findViewById<Spinner>(R.id.remind_spinner)
+        val btnCreate = view.findViewById<Button>(R.id.btn_create_task)
+
+        val dates = listOf("2025-07-01", "2025-07-02", "2025-07-03") // Gunakan format SQL: YYYY-MM-DD
+        val times = listOf("07:00", "08:00", "09:00", "10:00")
         val remindOptions = listOf("10 min early", "20 min early", "30 min early", "1 hour early")
 
         endTaskSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, dates)
@@ -35,17 +33,39 @@ class TaskFragment : Fragment() {
 
         btnCreate.setOnClickListener {
             val title = titleInput.text.toString()
-            val date = endTaskSpinner.selectedItem?.toString() ?: ""
-            val start = startTimeSpinner.selectedItem?.toString() ?: ""
-            val end = endTimeSpinner.selectedItem?.toString() ?: ""
+            val endDate = endTaskSpinner.selectedItem.toString()
+            val startTime = startTimeSpinner.selectedItem.toString()
+            val endTime = endTimeSpinner.selectedItem.toString()
+            val remind = remindSpinner.selectedItem.toString()
 
             if (title.isNotEmpty()) {
-                val newTask = Task(title, date, start, end)
-                TaskData.taskList.add(newTask)
-                Toast.makeText(requireContext(), "Task created!", Toast.LENGTH_SHORT).show()
-                titleInput.text.clear()
+                val url = "http://10.0.2.2/timenest_api/create_task.php"
+
+                val stringRequest = object : StringRequest(
+                    Request.Method.POST, url,
+                    Response.Listener { response ->
+                        Toast.makeText(requireContext(), "Task berhasil ditambahkan", Toast.LENGTH_SHORT).show()
+                        titleInput.text.clear()
+                    },
+                    Response.ErrorListener { error ->
+                        Toast.makeText(requireContext(), "Gagal: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    override fun getParams(): Map<String, String> {
+                        return mapOf(
+                            "title" to title,
+                            "end_date" to endDate,
+                            "start_time" to startTime,
+                            "end_time" to endTime,
+                            "remind" to remind
+                        )
+                    }
+                }
+
+                Volley.newRequestQueue(requireContext()).add(stringRequest)
+
             } else {
-                Toast.makeText(requireContext(), "Title is required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Judul tidak boleh kosong", Toast.LENGTH_SHORT).show()
             }
         }
 

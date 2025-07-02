@@ -86,22 +86,20 @@
 
             <!-- Ongoing Task -->
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Ongoing tasks"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
-                android:textColor="#2D2D2D"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginBottom="10dp"
+                android:textColor="#2D2D2D" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerTasks"
+            <LinearLayout
+                android:id="@+id/containerTasks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                android:overScrollMode="never" />
+                android:orientation="vertical"
+                android:layout_marginBottom="100dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </RelativeLayout>
