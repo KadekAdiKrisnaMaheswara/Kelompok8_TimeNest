@@ -2,6 +2,7 @@ package com.kelompok8.timenest.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,11 @@ class TaskFragment : Fragment() {
     private lateinit var remindSpinner: Spinner
     private lateinit var createTaskButton: Button
 
+    // List untuk menyimpan id dan nama kategori
+    private val categories = mutableListOf<Category>()
+
+    data class Category(val id: Int, val name: String)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,7 +45,7 @@ class TaskFragment : Fragment() {
         remindSpinner = view.findViewById(R.id.remind_spinner)
         createTaskButton = view.findViewById(R.id.btn_create_task)
 
-        // Sample isi spinner
+        // Isi data statis spinner lain
         val endDateOptions = listOf("2025-07-01", "2025-07-02", "2025-07-03")
         val timeOptions = listOf("07:00", "08:00", "09:00")
         val remindOptions = listOf("5 min early", "10 min early", "30 min early")
@@ -49,7 +55,6 @@ class TaskFragment : Fragment() {
         endTimeSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, timeOptions)
         remindSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, remindOptions)
 
-        // Ambil kategori dari server
         fetchCategories()
 
         createTaskButton.setOnClickListener {
@@ -59,15 +64,52 @@ class TaskFragment : Fragment() {
         return view
     }
 
+    private fun fetchCategories() {
+        val url = "http://10.0.2.2/timenest_api/get_categories.php"
+
+        val request = StringRequest(Request.Method.GET, url,
+            Response.Listener { response ->
+                try {
+                    val jsonArray = JSONArray(response)
+                    categories.clear()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val obj = jsonArray.getJSONObject(i)
+                        val id = obj.getInt("id")
+                        val name = obj.getString("name")
+                        categories.add(Category(id, name))
+                    }
+
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        categories.map { it.name } // tampilkan nama ke spinner
+                    )
+                    categorySpinner.adapter = adapter
+
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), "Gagal parsing kategori", Toast.LENGTH_SHORT).show()
+                }
+            },
+            Response.ErrorListener {
+                Toast.makeText(requireContext(), "Gagal mengambil kategori", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        Volley.newRequestQueue(requireContext()).add(request)
+    }
+
     private fun createTask() {
         val title = titleInput.text.toString().trim()
-        val category = categorySpinner.selectedItem?.toString() ?: ""
         val endDate = endTaskSpinner.selectedItem?.toString() ?: ""
         val startTime = startTimeSpinner.selectedItem?.toString() ?: ""
         val endTime = endTimeSpinner.selectedItem?.toString() ?: ""
         val remind = remindSpinner.selectedItem?.toString() ?: ""
 
-        if (title.isEmpty() || category.isEmpty() || endDate.isEmpty() ||
+        val categoryPosition = categorySpinner.selectedItemPosition
+        val selectedCategoryId = categories.getOrNull(categoryPosition)?.id ?: -1
+
+        if (title.isEmpty() || selectedCategoryId == -1 || endDate.isEmpty() ||
             startTime.isEmpty() || endTime.isEmpty() || remind.isEmpty()) {
             Toast.makeText(requireContext(), "Semua field harus diisi", Toast.LENGTH_SHORT).show()
             return
@@ -75,7 +117,6 @@ class TaskFragment : Fragment() {
 
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPref.getInt("user_id", -1)
-
         if (userId == -1) {
             Toast.makeText(requireContext(), "User ID tidak ditemukan. Silakan login ulang.", Toast.LENGTH_SHORT).show()
             return
@@ -101,7 +142,7 @@ class TaskFragment : Fragment() {
                 return hashMapOf(
                     "user_id" to userId.toString(),
                     "title" to title,
-                    "category" to category,
+                    "category_id" to selectedCategoryId.toString(),
                     "end_date" to endDate,
                     "start_time" to startTime,
                     "end_time" to endTime,
@@ -112,39 +153,4 @@ class TaskFragment : Fragment() {
 
         Volley.newRequestQueue(requireContext()).add(request)
     }
-
-    private fun fetchCategories() {
-        val url = "http://10.0.2.2/timenest_api/get_categories.php"
-
-        val request = StringRequest(Request.Method.GET, url,
-            Response.Listener { response ->
-                try {
-                    val jsonArray = JSONArray(response)
-                    val categories = mutableListOf<String>()
-
-                    for (i in 0 until jsonArray.length()) {
-                        val category = jsonArray.getJSONObject(i).getString("name")
-                        categories.add(category)
-                    }
-
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_spinner_dropdown_item,
-                        categories
-                    )
-                    categorySpinner.adapter = adapter
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Toast.makeText(requireContext(), "Gagal parsing kategori", Toast.LENGTH_SHORT).show()
-                }
-            },
-            Response.ErrorListener {
-                Toast.makeText(requireContext(), "Gagal mengambil kategori", Toast.LENGTH_SHORT).show()
-            }
-        )
-
-        Volley.newRequestQueue(requireContext()).add(request)
-    }
 }
-

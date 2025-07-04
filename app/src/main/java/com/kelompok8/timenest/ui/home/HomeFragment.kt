@@ -2,7 +2,6 @@ package com.kelompok8.timenest.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +13,19 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.kelompok8.timenest.R
+import com.kelompok8.timenest.model.GroupedTask
 import com.kelompok8.timenest.model.Task
+import com.kelompok8.timenest.ui.GroupedCategoryAdapter
 import org.json.JSONArray
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerCategories: RecyclerView
     private lateinit var recyclerTasks: RecyclerView
-    private val categoryList = mutableListOf<String>()
-    private val taskList = mutableListOf<Task>()
-    private lateinit var categoryAdapter: CategoryAdapter
+
+    private val groupedList = mutableListOf<GroupedTask>()
+
+    private lateinit var groupedCategoryAdapter: GroupedCategoryAdapter
     private lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
@@ -33,57 +35,32 @@ class HomeFragment : Fragment() {
     ): View {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Setup recycler categories
+        // Setup recycler untuk kategori
         recyclerCategories = rootView.findViewById(R.id.recyclerCategories)
-        recyclerCategories.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        categoryAdapter = CategoryAdapter(categoryList)
-        recyclerCategories.adapter = categoryAdapter
+        recyclerCategories.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // Setup recycler tasks
+        groupedCategoryAdapter = GroupedCategoryAdapter(groupedList) { selectedTasks ->
+            updateTaskList(selectedTasks)
+        }
+        recyclerCategories.adapter = groupedCategoryAdapter
+
+        // Setup recycler untuk daftar task di bawah
         recyclerTasks = rootView.findViewById(R.id.recyclerViewTasks)
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
-        taskAdapter = TaskAdapter(taskList)
+        taskAdapter = TaskAdapter(mutableListOf())
         recyclerTasks.adapter = taskAdapter
 
-        // Fetch data
-        fetchCategoriesFromServer()
+        // Ambil data dari server
         fetchTasksFromServer()
 
         return rootView
     }
 
-    private fun fetchCategoriesFromServer() {
-        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-        val userId = sharedPref.getInt("user_id", -1)
-
-        val url = "http://10.0.2.2/timenest_api/get_categories.php?user_id=$userId"
-
-        val request = StringRequest(Request.Method.GET, url,
-            { response ->
-                try {
-                    val jsonArray = JSONArray(response)
-                    categoryList.clear()
-                    for (i in 0 until jsonArray.length()) {
-                        val obj = jsonArray.getJSONObject(i)
-                        val category = obj.getString("name")
-                        categoryList.add(category)
-                    }
-                    categoryAdapter.notifyDataSetChanged()
-                } catch (e: Exception) {
-                    Toast.makeText(requireContext(), "Parse kategori gagal", Toast.LENGTH_SHORT).show()
-                }
-            },
-            { error ->
-                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        )
-
-        Volley.newRequestQueue(requireContext()).add(request)
-    }
-
     private fun fetchTasksFromServer() {
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPref.getInt("user_id", -1)
+        if (userId == -1) return
 
         val url = "http://10.0.2.2/timenest_api/get_task.php?user_id=$userId"
 
@@ -91,31 +68,47 @@ class HomeFragment : Fragment() {
             { response ->
                 try {
                     val jsonArray = JSONArray(response)
-                    taskList.clear()
+                    val taskMap = mutableMapOf<String, MutableList<Task>>()
+
                     for (i in 0 until jsonArray.length()) {
                         val obj = jsonArray.getJSONObject(i)
                         val task = Task(
                             id = obj.getInt("id"),
                             title = obj.getString("title"),
-                            category = obj.optString("category", "Unknown"),
+                            category = obj.optString("category") ?: "Uncategorized",
                             endDate = obj.getString("end_date"),
                             startTime = obj.getString("start_time"),
                             endTime = obj.getString("end_time"),
                             remind = obj.getString("remind")
                         )
-                        taskList.add(task)
+
+                        val key = task.category.ifBlank { "Uncategorized" }
+                        taskMap.getOrPut(key) { mutableListOf() }.add(task)
                     }
-                    taskAdapter.notifyDataSetChanged()
+
+                    groupedList.clear()
+                    groupedList.addAll(taskMap.map { (category, tasks) ->
+                        GroupedTask(category, tasks)
+                    })
+                    groupedCategoryAdapter.notifyDataSetChanged()
+
+                    // ✅ Tampilkan semua task langsung di bawah
+                    val allTasks = groupedList.flatMap { it.tasks }
+                    updateTaskList(allTasks)
+
                 } catch (e: Exception) {
-                    Log.e("HomeFragment", "Parse error", e)
-                    Toast.makeText(requireContext(), "Gagal parsing data task", Toast.LENGTH_SHORT).show()
+                    e.printStackTrace()
+                    Toast.makeText(requireContext(), "Gagal parsing task", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
-                Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        )
+                Toast.makeText(requireContext(), "Gagal mengambil task: ${error.message}", Toast.LENGTH_SHORT).show()
+            })
 
         Volley.newRequestQueue(requireContext()).add(request)
+    }
+
+    private fun updateTaskList(tasks: List<Task>) {
+        taskAdapter.updateData(tasks)
     }
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/rounded_category_bg"
+    android:layout_marginBottom="12dp">
+
+    <!-- TextView utama untuk GroupedTaskAdapter -->
+    <TextView
+        android:id="@+id/textCategoryName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kategori"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#4A235A"
+        android:layout_marginBottom="8dp" />
+
+    <!-- TextView tambahan untuk CategoryAdapter -->
+    <TextView
+        android:id="@+id/tvCategoryName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Category"
+        android:textColor="#4A235A"
+        android:textSize="14sp"
+        android:visibility="gone" /> <!-- Opsional, bisa disembunyikan -->
+
+    <!-- Daftar task dalam kategori -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerTasksInCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:overScrollMode="never" />
+</LinearLayout>

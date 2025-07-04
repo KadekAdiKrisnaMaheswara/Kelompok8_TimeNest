@@ -47,4 +47,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"/>
 
+    <TextView
+        android:id="@+id/tvEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tenggat: 2025-07-05"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp"/>
+
+
 </LinearLayout>
