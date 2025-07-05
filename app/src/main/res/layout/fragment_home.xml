@@ -23,10 +23,11 @@
             android:layout_marginBottom="8dp">
 
             <TextView
+                android:id="@+id/tvWelcome"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Hi, Kelompok 8!"
+                android:text="@string/greeting"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="#2D2D2D" />

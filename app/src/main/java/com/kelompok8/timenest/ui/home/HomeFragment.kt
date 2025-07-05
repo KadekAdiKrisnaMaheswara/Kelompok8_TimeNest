@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var recyclerCategories: RecyclerView
     private lateinit var recyclerTasks: RecyclerView
+    private lateinit var tvWelcome: TextView
 
     private val groupedList = mutableListOf<GroupedTask>()
 
@@ -34,6 +36,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+
+        tvWelcome = rootView.findViewById(R.id.tvWelcome)
+
+        // ✅ Baca nama user dari SharedPreferences
+        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val name = sharedPref.getString("user_name", null)
+
+        val greetingName = if (!name.isNullOrBlank()) name else getString(R.string.default_user_name)
+        tvWelcome.text = getString(R.string.greeting, greetingName)
 
         // Setup recycler untuk kategori
         recyclerCategories = rootView.findViewById(R.id.recyclerCategories)

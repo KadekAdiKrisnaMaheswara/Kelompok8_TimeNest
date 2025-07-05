@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.kelompok8.timenest.R
@@ -24,17 +25,18 @@ class LoginActivity : AppCompatActivity() {
         val tvRegister = findViewById<TextView>(R.id.tvRegister)
 
         btnLogin.setOnClickListener {
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
+            val inputEmail = etEmail.text.toString().trim()
+            val inputPassword = etPassword.text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (inputEmail.isEmpty() || inputPassword.isEmpty()) {
                 Toast.makeText(this, "Email dan password wajib diisi", Toast.LENGTH_SHORT).show()
                 btnLogin.isEnabled = true
                 return@setOnClickListener
             } else {
                 val url = "http://10.0.2.2/timenest_api/login.php"
 
-                val stringRequest = object : StringRequest(Request.Method.POST, url,
+                val stringRequest = object : StringRequest(
+                    Request.Method.POST, url,
                     Response.Listener { response ->
                         try {
                             val jsonResponse = JSONObject(response)
@@ -42,10 +44,16 @@ class LoginActivity : AppCompatActivity() {
 
                             if (status == "success") {
                                 val userId = jsonResponse.getInt("user_id")
+                                val fullName = jsonResponse.optString("full_name", "")
+                                val userEmail = jsonResponse.optString("email", "")
 
-                                // Simpan user_id ke SharedPreferences
+                                // Simpan user_id, full_name, email ke SharedPreferences
                                 val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-                                sharedPref.edit().putInt("user_id", userId).apply()
+                                sharedPref.edit {
+                                    putInt("user_id", userId)
+                                    putString("user_name", fullName)
+                                    putString("email", userEmail)
+                                }
 
                                 Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(this, DashboardActivity::class.java))
@@ -55,16 +63,18 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                             }
                         } catch (e: Exception) {
+                            e.printStackTrace()
                             Toast.makeText(this, "Format respons tidak valid", Toast.LENGTH_SHORT).show()
                         }
                     },
                     Response.ErrorListener { error ->
                         Toast.makeText(this, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
-                    }) {
+                    }
+                ) {
                     override fun getParams(): Map<String, String> {
                         return mapOf(
-                            "email" to email,
-                            "password" to password
+                            "email" to inputEmail,
+                            "password" to inputPassword
                         )
                     }
                 }

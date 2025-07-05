@@ -1,14 +1,21 @@
 <resources>
+    <!-- Umum -->
     <string name="app_name">TimeNest</string>
-    <string name="greeting">Hi, Kelompok 8!</string>
-    <string name="task_pending">18 tasks pending</string>
-    <string name="categories">Categories</string>
-    <string name="ongoing_tasks">Ongoing tasks</string>
-    <string name="search_hint">Search</string>
-    <string name="profile_icon">Profile Icon</string>
-    <string name="desc_icon_account">Account Icon</string>
-    <string name="menu_my_account">My Account</string>
-    <string name="menu_notification">Notification</string>
-    <string name="menu_mode">Mode</string>
+    <string name="greeting">Hi, %1$s!</string>
+    <string name="default_user_name">Kelompok 8</string>
+
+    <!-- Profile Fragment -->
+    <string name="profile_image">Foto Profil</string>
+    <string name="change_photo">Ganti Foto</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="email_default">kelompok8@gmail.com</string>
+    <string name="edit_email_icon">Edit email icon</string>
+    <string name="save_profile">Simpan Profil</string>
     <string name="logout">Logout</string>
+
+    <!-- Progress Placeholder -->
+    <string name="progress_today_value">50%</string>
+    <string name="progress_today_label">Today</string>
+    <string name="progress_month_value">70%</string>
+    <string name="progress_month_label">Month</string>
 </resources>
