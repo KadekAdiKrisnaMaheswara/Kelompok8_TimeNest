@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tvTaskCategory"
-        android:text="Kategori: ..."
+        android:text="Category: ..."
         android:textSize="14sp"
         android:layout_marginTop="4dp"
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/tvTaskDate"
-        android:text="Tenggat: ..."
+        android:text="End Date: ..."
         android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/tvTaskTime"
-        android:text="Jam: ..."
+        android:text="Time: ..."
         android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,19 +41,10 @@
 
     <TextView
         android:id="@+id/tvTaskRemind"
-        android:text="Ingatkan: ..."
+        android:text="Remind: ..."
         android:textSize="14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"/>
-
-    <TextView
-        android:id="@+id/tvEndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tenggat: 2025-07-05"
-        android:textSize="14sp"
-        android:layout_marginTop="4dp"/>
-
 
 </LinearLayout>

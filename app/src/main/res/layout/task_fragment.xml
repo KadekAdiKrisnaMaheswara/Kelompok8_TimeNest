@@ -82,6 +82,26 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/rounded_input" />
 
+            <!-- Start Date -->
+            <TextView
+                android:text="Start Date"
+                android:textSize="14sp"
+                android:textColor="#000000"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/start_task_input"
+                android:hint="Select Start Date"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
             <!-- End Date -->
             <TextView
                 android:text="End Date"
@@ -92,11 +112,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/end_task_spinner"
+            <EditText
+                android:id="@+id/end_task_input"
+                android:hint="Select End Date"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_input" />
+                android:layout_height="wrap_content" />
 
             <!-- Start & End Time -->
             <TextView

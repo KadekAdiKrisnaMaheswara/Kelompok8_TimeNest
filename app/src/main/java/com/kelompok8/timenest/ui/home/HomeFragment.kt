@@ -17,6 +17,7 @@ import com.kelompok8.timenest.R
 import com.kelompok8.timenest.model.GroupedTask
 import com.kelompok8.timenest.model.Task
 import com.kelompok8.timenest.ui.GroupedCategoryAdapter
+import com.kelompok8.timenest.data.TaskData
 import org.json.JSONArray
 
 class HomeFragment : Fragment() {
@@ -64,6 +65,10 @@ class HomeFragment : Fragment() {
 
         // Ambil data dari server
         fetchTasksFromServer()
+
+        // Ambil task dari TaskData
+        val localTasks = TaskData.taskList
+        taskAdapter.updateTasks(localTasks)
 
         return rootView
     }

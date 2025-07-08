@@ -31,6 +31,12 @@ class TaskAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateTasks(newTasks: List<Task>) {
+        taskList.clear()
+        taskList.addAll(newTasks)
+        notifyDataSetChanged()
+    }
+
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTaskTitle: TextView = itemView.findViewById(R.id.tvTaskTitle)
         private val tvTaskCategory: TextView = itemView.findViewById(R.id.tvTaskCategory)
