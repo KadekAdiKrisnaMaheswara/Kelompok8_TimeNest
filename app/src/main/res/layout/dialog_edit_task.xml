@@ -1,0 +1,37 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTaskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Judul Task"/>
+
+    <EditText
+        android:id="@+id/editTaskEndDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Tanggal Selesai"/>
+
+    <EditText
+        android:id="@+id/editTaskStartTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Jam Mulai"/>
+
+    <EditText
+        android:id="@+id/editTaskEndTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Jam Selesai"/>
+
+    <EditText
+        android:id="@+id/editTaskRemind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Remind"/>
+</LinearLayout>

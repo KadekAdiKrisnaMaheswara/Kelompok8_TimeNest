@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kelompok8.timenest.R
@@ -29,7 +30,15 @@ class GroupedTaskAdapter(
         val grouped = groupedTasks[position]
         holder.categoryName.text = grouped.category
 
-        val taskAdapter = TaskAdapter(grouped.tasks.toMutableList())
+        val taskAdapter = TaskAdapter(
+            grouped.tasks.toMutableList(),
+            onEditClick = { task ->
+                Toast.makeText(holder.itemView.context, "Edit: ${task.title}", Toast.LENGTH_SHORT).show()
+            },
+            onDeleteClick = { task ->
+                Toast.makeText(holder.itemView.context, "Delete: ${task.title}", Toast.LENGTH_SHORT).show()
+            }
+        )
         holder.taskRecycler.layoutManager = LinearLayoutManager(holder.itemView.context)
         holder.taskRecycler.adapter = taskAdapter
     }

@@ -1,6 +1,8 @@
 <resources>
     <!-- Umum -->
     <string name="app_name">TimeNest</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="delete_task">Delete Task</string>
     <string name="greeting">Hi, %1$s!</string>
     <string name="default_user_name">Kelompok 8</string>
 
