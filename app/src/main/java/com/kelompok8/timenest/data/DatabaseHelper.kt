@@ -94,20 +94,6 @@ class DatabaseHelper(context: Context) :
         }
     }
 
-    fun getCategoryIdByName(userId: Int, categoryName: String): Int {
-        val db = this.readableDatabase
-        val cursor = db.rawQuery(
-            "SELECT id FROM categories WHERE user_id = ? AND name = ? LIMIT 1",
-            arrayOf(userId.toString(), categoryName)
-        )
-        var id = -1
-        if (cursor.moveToFirst()) {
-            id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-        }
-        cursor.close()
-        return id
-    }
-
     fun getAllTasks(): List<Task> {
         val list = mutableListOf<Task>()
         val db = readableDatabase
