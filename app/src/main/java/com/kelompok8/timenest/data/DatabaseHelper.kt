@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.kelompok8.timenest.model.Task
-import android.util.Log// ✅ Pastikan import dari model!
+import android.util.Log
 import android.content.ContentValues
 
 class DatabaseHelper(context: Context) :
@@ -24,7 +24,7 @@ class DatabaseHelper(context: Context) :
             CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,
-                name TEXT NOT NULL UNIQUE
+                name TEXT NOT NULL
             );
         """.trimIndent()
 
@@ -47,6 +47,10 @@ class DatabaseHelper(context: Context) :
         db.execSQL(createUsersTable)
         db.execSQL(createCategoriesTable)
         db.execSQL(createTasksTable)
+
+        // Tambahkan data contoh
+        db.execSQL("INSERT INTO categories (user_id, name) VALUES (1, 'Work')")
+        db.execSQL("INSERT INTO categories (user_id, name) VALUES (1, 'Study')")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -136,9 +140,6 @@ class DatabaseHelper(context: Context) :
             arrayOf(userId.toString())
         )
 
-        Log.d("DatabaseHelper", "Query run: SELECT name FROM categories WHERE user_id = $userId")
-        Log.d("DatabaseHelper", "Cursor count: ${cursor.count}")
-
         while (cursor.moveToNext()) {
             val name = cursor.getString(0)
             categoryList.add(name)
@@ -148,20 +149,18 @@ class DatabaseHelper(context: Context) :
         cursor.close()
         db.close()
         return categoryList
-
-        fun insertCategory(userId: Int, name: String): Boolean {
-            val db = writableDatabase
-            val values = ContentValues().apply {
-                put("user_id", userId)
-                put("name", name)
-            }
-            val result = db.insert("categories", null, values)
-            db.close()
-            return result != -1L
-        }
-
     }
 
+    fun insertCategory(userId: Int, name: String): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("user_id", userId)
+            put("name", name)
+        }
+        val result = db.insert("categories", null, values)
+        db.close()
+        return result != -1L
+    }
 
     companion object {
         const val DATABASE_NAME = "TimeNestDB"

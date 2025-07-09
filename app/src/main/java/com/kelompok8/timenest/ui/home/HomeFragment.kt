@@ -1,7 +1,6 @@
 package com.kelompok8.timenest.ui.home
 
 import android.app.AlertDialog
-import com.kelompok8.timenest.data.DatabaseHelper
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -9,7 +8,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
@@ -19,6 +17,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.kelompok8.timenest.R
+import com.kelompok8.timenest.data.DatabaseHelper
 import com.kelompok8.timenest.model.GroupedTask
 import com.kelompok8.timenest.model.Task
 import com.kelompok8.timenest.ui.GroupedCategoryAdapter
@@ -55,23 +54,18 @@ class HomeFragment : Fragment() {
         val greetingName = if (!name.isNullOrBlank()) name else getString(R.string.default_user_name)
         tvWelcome.text = getString(R.string.greeting, greetingName)
 
-        recyclerCategories = rootView.findViewById(R.id.recyclerCategories)
-        recyclerCategories.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        val btnAddCategory = rootView.findViewById<Button>(R.id.btn_add_category)
+        btnAddCategory.setOnClickListener { showAddCategoryDialog() }
 
-        groupedCategoryAdapter = GroupedCategoryAdapter(groupedList) { selectedTasks ->
-            updateTaskList(selectedTasks)
-        }
+        recyclerCategories = rootView.findViewById(R.id.recyclerCategories)
+        recyclerCategories.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        groupedCategoryAdapter = GroupedCategoryAdapter(groupedList) { updateTaskList(it) }
         recyclerCategories.adapter = groupedCategoryAdapter
 
         recyclerTasks = rootView.findViewById(R.id.recyclerViewTasks)
         recyclerTasks.layoutManager = LinearLayoutManager(requireContext())
-
-        taskAdapter = TaskAdapter(mutableListOf(), { task ->
-            showEditTaskDialog(task)
-        }, { task ->
-            confirmDeleteTask(task)
-        })
-
+        taskAdapter = TaskAdapter(mutableListOf(), { showEditTaskDialog(it) }, { confirmDeleteTask(it) })
         recyclerTasks.adapter = taskAdapter
 
         fetchTasksFromServer()
@@ -95,11 +89,11 @@ class HomeFragment : Fragment() {
 
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
-                    val categoryName = obj.optString("categories")
+                    val categoryName = obj.optString("category")
                     val task = Task(
                         id = obj.getInt("id"),
                         title = obj.getString("title"),
-                        categories = if (categoryName.isNullOrBlank() || categoryName == "null") "Uncategorized" else categoryName,
+                        category = if (categoryName.isNullOrBlank() || categoryName == "null") "Uncategorized" else categoryName,
                         startDate = obj.getString("start_date"),
                         endDate = obj.getString("end_date"),
                         startTime = obj.getString("start_time"),
@@ -107,7 +101,7 @@ class HomeFragment : Fragment() {
                         remind = obj.getString("remind")
                     )
                     fullTaskList.add(task)
-                    taskMap.getOrPut(task.categories) { mutableListOf() }.add(task)
+                    taskMap.getOrPut(task.category) { mutableListOf() }.add(task)
                 }
 
                 groupedList.clear()
@@ -153,7 +147,7 @@ class HomeFragment : Fragment() {
 
     private fun filterTasks(query: String) {
         val filtered = fullTaskList.filter {
-            it.title.contains(query, ignoreCase = true) || it.categories.contains(query, ignoreCase = true)
+            it.title.contains(query, ignoreCase = true) || it.category.contains(query, ignoreCase = true)
         }
         updateTaskList(filtered)
     }
@@ -169,43 +163,28 @@ class HomeFragment : Fragment() {
         val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinner_edit_category)
         val spinnerRemind = dialogView.findViewById<Spinner>(R.id.spinner_edit_remind)
 
-        // Setup category spinner
         val dbHelper = DatabaseHelper(requireContext())
-        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-        val userId = sharedPref.getInt("user_id", -1)
-        val categoryList = dbHelper.getAllCategories(userId) // ✅ sekarang OK
-        Toast.makeText(requireContext(), "Category loaded: ${categoryList.size}", Toast.LENGTH_SHORT).show()
-        Log.d("HomeFragment", "Category list for spinner: $categoryList")
-
-        //val categoryAdapter = ArrayAdapter<String>(
-        //    requireContext(),
-        //    android.R.layout.simple_spinner_item,
-        //    categoryList
-        //)
+        val userId = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE).getInt("user_id", -1)
+        val categoryList = dbHelper.getAllCategories(userId).toMutableList()
         val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryList)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerCategory.adapter = categoryAdapter
-
-        val categoryIndex = categoryList.indexOf(task.categories)
+        val categoryIndex = categoryList.indexOf(task.category)
         if (categoryIndex != -1) spinnerCategory.setSelection(categoryIndex)
 
-        // Setup remind spinner
         val remindOptions = listOf("None", "5 min early", "10 min early", "30 min early", "1 hour early")
         val remindAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, remindOptions)
         remindAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerRemind.adapter = remindAdapter
-
         val remindIndex = remindOptions.indexOf(task.remind)
         if (remindIndex != -1) spinnerRemind.setSelection(remindIndex)
 
-        // Set value to field
         edtTitle.setText(task.title)
-        edtStartDate.setText(task.startDate) // pastikan Task punya startDate
+        edtStartDate.setText(task.startDate)
         edtEndDate.setText(task.endDate)
         edtStartTime.setText(task.startTime)
         edtEndTime.setText(task.endTime)
 
-        // Set picker actions
         edtStartDate.setOnClickListener { showDatePicker(edtStartDate) }
         edtEndDate.setOnClickListener { showDatePicker(edtEndDate) }
         edtStartTime.setOnClickListener { showTimePicker(edtStartTime) }
@@ -221,7 +200,7 @@ class HomeFragment : Fragment() {
                 val newStartTime = edtStartTime.text.toString().trim()
                 val newEndTime = edtEndTime.text.toString().trim()
                 val newRemind = spinnerRemind.selectedItem.toString()
-                val selectedCategory = spinnerCategory.selectedItem.toString()
+                val selectedCategory = spinnerCategory.selectedItem?.toString() ?: "Uncategorized"
 
                 updateTask(task.id, newTitle, newStartDate, newEndDate, newStartTime, newEndTime, newRemind, selectedCategory)
             }
@@ -251,6 +230,7 @@ class HomeFragment : Fragment() {
                 return hashMapOf(
                     "id" to taskId.toString(),
                     "title" to title,
+                    "start_date" to startDate,
                     "end_date" to endDate,
                     "start_time" to startTime,
                     "end_time" to endTime,
@@ -291,28 +271,53 @@ class HomeFragment : Fragment() {
 
     private fun showDatePicker(editText: EditText) {
         val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        val datePicker = DatePickerDialog(requireContext(), { _, y, m, d ->
-            val selectedDate = String.format("%04d-%02d-%02d", y, m + 1, d)
-            editText.setText(selectedDate)
-        }, year, month, day)
-
-        datePicker.show()
+        DatePickerDialog(
+            requireContext(),
+            { _, y, m, d -> editText.setText(String.format("%04d-%02d-%02d", y, m + 1, d)) },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
     private fun showTimePicker(editText: EditText) {
         val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        TimePickerDialog(
+            requireContext(),
+            { _, h, m -> editText.setText(String.format("%02d:%02d", h, m)) },
+            calendar.get(Calendar.HOUR_OF_DAY),
+            calendar.get(Calendar.MINUTE),
+            true
+        ).show()
+    }
 
-        val timePicker = TimePickerDialog(requireContext(), { _, h, m ->
-            val selectedTime = String.format("%02d:%02d", h, m)
-            editText.setText(selectedTime)
-        }, hour, minute, true)
+    private fun insertCategory(categoryName: String) {
+        val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val userId = sharedPref.getInt("user_id", -1)
+        val dbHelper = DatabaseHelper(requireContext())
+        val success = dbHelper.insertCategory(userId, categoryName)
+        if (success) {
+            Toast.makeText(requireContext(), "Kategori ditambahkan", Toast.LENGTH_SHORT).show()
+            fetchTasksFromServer()
+        } else {
+            Toast.makeText(requireContext(), "Kategori gagal ditambahkan", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-        timePicker.show()
+    private fun showAddCategoryDialog() {
+        val input = EditText(requireContext())
+        input.hint = "Nama kategori"
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Tambah Kategori")
+            .setView(input)
+            .setPositiveButton("Tambah") { _, _ ->
+                val categoryName = input.text.toString().trim()
+                if (categoryName.isNotEmpty()) {
+                    insertCategory(categoryName)
+                }
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 }

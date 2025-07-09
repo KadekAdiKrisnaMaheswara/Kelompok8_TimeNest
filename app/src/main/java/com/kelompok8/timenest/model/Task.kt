@@ -5,7 +5,7 @@ import java.sql.Date
 data class Task(
     val id: Int,
     val title: String,
-    val categories: String,
+    val category: String,
     val startDate: String,
     val endDate: String,
     val startTime: String,

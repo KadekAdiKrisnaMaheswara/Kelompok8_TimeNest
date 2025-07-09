@@ -45,7 +45,7 @@ class TaskAdapter(
 
         fun bind(task: Task) {
             tvTaskTitle.text = task.title
-            tvTaskCategory.text = "Category: ${task.categories}"
+            tvTaskCategory.text = "Category: ${task.category}"
             tvTaskDate.text = "End Date: ${task.endDate}"
             tvTaskTime.text = "Time: ${task.startTime} - ${task.endTime}"
             tvTaskRemind.text = "Remind: ${task.remind}"
