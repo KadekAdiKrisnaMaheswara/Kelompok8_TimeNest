@@ -20,4 +20,14 @@
     <string name="progress_today_label">Today</string>
     <string name="progress_month_value">70%</string>
     <string name="progress_month_label">Month</string>
+
+    <string name="hint_task_title">Judul Task</string>
+    <string name="label_category">Category</string>
+    <string name="label_start_date">Start Date</string>
+    <string name="label_end_date">End Date</string>
+    <string name="hint_select_start_date">Select start date</string>
+    <string name="hint_select_end_date">Select end date</string>
+    <string name="label_start_end_time">Start Time                         End Time</string>
+    <string name="hint_time">HH:mm</string>
+    <string name="hint_remind">Remind (e.g., 10 min before)</string>
 </resources>

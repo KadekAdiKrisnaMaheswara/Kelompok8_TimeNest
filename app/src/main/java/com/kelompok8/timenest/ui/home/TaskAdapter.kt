@@ -45,10 +45,10 @@ class TaskAdapter(
 
         fun bind(task: Task) {
             tvTaskTitle.text = task.title
-            tvTaskCategory.text = "Kategori: ${task.category}"
-            tvTaskDate.text = "Tenggat: ${task.endDate}"
-            tvTaskTime.text = "Jam: ${task.startTime} - ${task.endTime}"
-            tvTaskRemind.text = "Ingatkan: ${task.remind}"
+            tvTaskCategory.text = "Category: ${task.categories}"
+            tvTaskDate.text = "End Date: ${task.endDate}"
+            tvTaskTime.text = "Time: ${task.startTime} - ${task.endTime}"
+            tvTaskRemind.text = "Remind: ${task.remind}"
 
             ivEdit.setOnClickListener {
                 onEditClick(task)

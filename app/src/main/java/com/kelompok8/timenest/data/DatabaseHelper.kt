@@ -21,6 +21,7 @@ class DatabaseHelper(context: Context) :
         val createCategoriesTable = """
             CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
                 name TEXT NOT NULL UNIQUE
             );
         """.trimIndent()
@@ -108,7 +109,7 @@ class DatabaseHelper(context: Context) :
                 val startTime = cursor.getString(4)
                 val endTime = cursor.getString(5)
                 val remind = cursor.getString(6)
-                val isCompleted = cursor.getInt(7) == 1
+                val isCompleted = cursor.getInt(cursor.getColumnIndexOrThrow("is_completed")).toString()
 
                 list.add(
                     Task(
@@ -124,8 +125,26 @@ class DatabaseHelper(context: Context) :
         return list
     }
 
+    fun getAllCategories(userId: Int): List<String> {
+        val db = this.readableDatabase
+        val categoryList = mutableListOf<String>()
+
+        val cursor = db.rawQuery(
+            "SELECT name FROM categories WHERE user_id = ?",
+            arrayOf(userId.toString())
+        )
+
+        while (cursor.moveToNext()) {
+            categoryList.add(cursor.getString(0))
+        }
+
+        cursor.close()
+        db.close()
+        return categoryList
+    }
+
     companion object {
         const val DATABASE_NAME = "TimeNestDB"
-        const val DATABASE_VERSION = 3 // dinaikkan karena ada struktur baru
+        const val DATABASE_VERSION = 3
     }
 }
