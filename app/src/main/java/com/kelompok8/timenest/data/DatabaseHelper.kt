@@ -3,7 +3,6 @@ package com.kelompok8.timenest.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.kelompok8.timenest.model.Task
 import android.util.Log
 import android.content.ContentValues
 
@@ -58,77 +57,6 @@ class DatabaseHelper(context: Context) :
         db.execSQL("DROP TABLE IF EXISTS categories")
         db.execSQL("DROP TABLE IF EXISTS users")
         onCreate(db)
-    }
-
-    fun insertTask(
-        userId: Int,
-        categoryId: Int,
-        title: String,
-        endDate: String,
-        startTime: String,
-        endTime: String,
-        remind: String,
-        isCompleted: Boolean
-    ): Boolean {
-        val db = writableDatabase
-        val query = """
-            INSERT INTO tasks (user_id, category_id, title, end_date, start_time, end_time, remind, is_completed)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """.trimIndent()
-
-        return try {
-            val stmt = db.compileStatement(query)
-            stmt.bindLong(1, userId.toLong())
-            stmt.bindLong(2, categoryId.toLong())
-            stmt.bindString(3, title)
-            stmt.bindString(4, endDate)
-            stmt.bindString(5, startTime)
-            stmt.bindString(6, endTime)
-            stmt.bindString(7, remind)
-            stmt.bindLong(8, if (isCompleted) 1 else 0)
-            stmt.executeInsert()
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
-
-    fun getAllTasks(): List<Task> {
-        val list = mutableListOf<Task>()
-        val db = readableDatabase
-
-        val query = """
-            SELECT t.id, t.title, c.name AS category, t.end_date, t.start_time, t.end_time, t.remind, t.is_completed
-            FROM tasks t
-            LEFT JOIN categories c ON t.category_id = c.id
-        """
-
-        val cursor = db.rawQuery(query, null)
-
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getInt(0)
-                val title = cursor.getString(1)
-                val category = cursor.getString(2) ?: "Uncategorized"
-                val endDate = cursor.getString(3)
-                val startTime = cursor.getString(4)
-                val endTime = cursor.getString(5)
-                val remind = cursor.getString(6)
-                val isCompleted = cursor.getInt(cursor.getColumnIndexOrThrow("is_completed")).toString()
-
-                list.add(
-                    Task(
-                        id, title, category,
-                        endDate, startTime, endTime,
-                        remind, isCompleted
-                    )
-                )
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        return list
     }
 
     fun getAllCategories(userId: Int): List<String> {
