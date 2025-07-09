@@ -22,6 +22,7 @@ import com.kelompok8.timenest.model.GroupedTask
 import com.kelompok8.timenest.model.Task
 import com.kelompok8.timenest.ui.GroupedCategoryAdapter
 import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -89,12 +90,12 @@ class HomeFragment : Fragment() {
 
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
-                    val categoryName = obj.optString("category")
+                    val categoryName = obj.optString("category") ?: "Uncategorized"
                     val task = Task(
                         id = obj.getInt("id"),
                         title = obj.getString("title"),
-                        category = if (categoryName.isNullOrBlank() || categoryName == "null") "Uncategorized" else categoryName,
-                        startDate = obj.getString("start_date"),
+                        category = if (categoryName == "null" || categoryName.isBlank()) "Uncategorized" else categoryName,
+                        startDate = obj.optString("start_date", ""),
                         endDate = obj.getString("end_date"),
                         startTime = obj.getString("start_time"),
                         endTime = obj.getString("end_time"),
@@ -114,7 +115,7 @@ class HomeFragment : Fragment() {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(requireContext(), "Gagal parsing task", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Gagal parsing task: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }, { error ->
             Toast.makeText(requireContext(), "Gagal mengambil task: ${error.message}", Toast.LENGTH_SHORT).show()
@@ -163,14 +164,37 @@ class HomeFragment : Fragment() {
         val spinnerCategory = dialogView.findViewById<Spinner>(R.id.spinner_edit_category)
         val spinnerRemind = dialogView.findViewById<Spinner>(R.id.spinner_edit_remind)
 
-        val dbHelper = DatabaseHelper(requireContext())
+        // Declare category list and map outside the request
+        val categoryList = mutableListOf<String>()
+        val categoryMap = mutableMapOf<String, Int>()
+
         val userId = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE).getInt("user_id", -1)
-        val categoryList = dbHelper.getAllCategories(userId).toMutableList()
-        val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryList)
-        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCategory.adapter = categoryAdapter
-        val categoryIndex = categoryList.indexOf(task.category)
-        if (categoryIndex != -1) spinnerCategory.setSelection(categoryIndex)
+        val categoryUrl = "http://10.0.2.2/timenest_api/get_categories.php?user_id=$userId"
+
+        val queue = Volley.newRequestQueue(requireContext())
+        val request = StringRequest(Request.Method.GET, categoryUrl, { response ->
+            val jsonArray = JSONArray(response)
+
+            for (i in 0 until jsonArray.length()) {
+                val obj = jsonArray.getJSONObject(i)
+                val id = obj.getInt("id")
+                val name = obj.getString("name")
+                categoryList.add(name)
+                categoryMap[name] = id
+            }
+
+            val categoryAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, categoryList)
+            categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerCategory.adapter = categoryAdapter
+
+            val categoryIndex = categoryList.indexOf(task.category)
+            if (categoryIndex != -1) spinnerCategory.setSelection(categoryIndex)
+
+        }, {
+            Toast.makeText(requireContext(), "Gagal ambil kategori", Toast.LENGTH_SHORT).show()
+        })
+
+        queue.add(request)
 
         val remindOptions = listOf("None", "5 min early", "10 min early", "30 min early", "1 hour early")
         val remindAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, remindOptions)
@@ -190,22 +214,31 @@ class HomeFragment : Fragment() {
         edtStartTime.setOnClickListener { showTimePicker(edtStartTime) }
         edtEndTime.setOnClickListener { showTimePicker(edtEndTime) }
 
-        AlertDialog.Builder(requireContext())
+        val alertDialog = AlertDialog.Builder(requireContext())
             .setTitle("Edit Task")
             .setView(dialogView)
-            .setPositiveButton("Simpan") { _, _ ->
+            .setPositiveButton("Simpan", null) // nanti kita handle klik manual biar bisa akses Spinner
+            .setNegativeButton("Batal", null)
+            .create()
+
+        alertDialog.setOnShowListener {
+            val button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            button.setOnClickListener {
                 val newTitle = edtTitle.text.toString().trim()
                 val newStartDate = edtStartDate.text.toString().trim()
                 val newEndDate = edtEndDate.text.toString().trim()
                 val newStartTime = edtStartTime.text.toString().trim()
                 val newEndTime = edtEndTime.text.toString().trim()
                 val newRemind = spinnerRemind.selectedItem.toString()
-                val selectedCategory = spinnerCategory.selectedItem?.toString() ?: "Uncategorized"
+                val selectedCategoryName = spinnerCategory.selectedItem?.toString() ?: "Uncategorized"
+                val selectedCategoryId = categoryMap[selectedCategoryName] ?: 0
 
-                updateTask(task.id, newTitle, newStartDate, newEndDate, newStartTime, newEndTime, newRemind, selectedCategory)
+                updateTask(task.id, newTitle, newStartDate, newEndDate, newStartTime, newEndTime, newRemind, selectedCategoryId)
+                alertDialog.dismiss()
             }
-            .setNegativeButton("Batal", null)
-            .show()
+        }
+
+        alertDialog.show()
     }
 
     private fun updateTask(
@@ -216,7 +249,7 @@ class HomeFragment : Fragment() {
         startTime: String,
         endTime: String,
         remind: String,
-        category: String
+        categoryId: Int
     ) {
         val url = "http://10.0.2.2/timenest_api/update_task.php"
 
@@ -235,13 +268,14 @@ class HomeFragment : Fragment() {
                     "start_time" to startTime,
                     "end_time" to endTime,
                     "remind" to remind,
-                    "category" to category
+                    "category_id" to categoryId.toString()  // penting!
                 )
             }
         }
 
         Volley.newRequestQueue(requireContext()).add(request)
     }
+
 
     private fun confirmDeleteTask(task: Task) {
         AlertDialog.Builder(requireContext())

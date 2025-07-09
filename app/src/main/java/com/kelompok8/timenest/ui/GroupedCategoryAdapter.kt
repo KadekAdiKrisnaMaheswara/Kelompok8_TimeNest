@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kelompok8.timenest.R
 import com.kelompok8.timenest.model.GroupedTask
 import com.kelompok8.timenest.model.Task
+import android.util.Log
+
 
 class GroupedCategoryAdapter(
     private val groupedTasks: List<GroupedTask>,
@@ -22,8 +24,10 @@ class GroupedCategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val group = groupedTasks[position]
+        Log.d("ADAPTER_BIND", "Binding ${group.category} with ${group.tasks.size} tasks")
         holder.bind(group)
     }
+
 
     override fun getItemCount(): Int = groupedTasks.size
 

@@ -82,7 +82,9 @@ class TaskFragment : Fragment() {
     }
 
     private fun fetchCategories(selectedId: Int? = null) {
-        val url = "http://10.0.2.2/timenest_api/get_categories.php"
+        val userId = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            .getInt("user_id", -1)
+        val url = "http://10.0.2.2/timenest_api/get_categories.php?user_id=$userId"
 
         val request = StringRequest(Request.Method.GET, url, { response ->
             try {
