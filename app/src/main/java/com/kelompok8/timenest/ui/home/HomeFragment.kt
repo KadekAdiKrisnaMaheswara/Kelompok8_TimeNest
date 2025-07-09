@@ -174,6 +174,7 @@ class HomeFragment : Fragment() {
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val userId = sharedPref.getInt("user_id", -1)
         val categoryList = dbHelper.getAllCategories(userId) // ✅ sekarang OK
+        Toast.makeText(requireContext(), "Category loaded: ${categoryList.size}", Toast.LENGTH_SHORT).show()
         Log.d("HomeFragment", "Category list for spinner: $categoryList")
 
         //val categoryAdapter = ArrayAdapter<String>(

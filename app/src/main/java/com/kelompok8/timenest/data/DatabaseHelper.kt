@@ -3,7 +3,9 @@ package com.kelompok8.timenest.data
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.kelompok8.timenest.model.Task  // ✅ Pastikan import dari model!
+import com.kelompok8.timenest.model.Task
+import android.util.Log// ✅ Pastikan import dari model!
+import android.content.ContentValues
 
 class DatabaseHelper(context: Context) :
     SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -134,14 +136,32 @@ class DatabaseHelper(context: Context) :
             arrayOf(userId.toString())
         )
 
+        Log.d("DatabaseHelper", "Query run: SELECT name FROM categories WHERE user_id = $userId")
+        Log.d("DatabaseHelper", "Cursor count: ${cursor.count}")
+
         while (cursor.moveToNext()) {
-            categoryList.add(cursor.getString(0))
+            val name = cursor.getString(0)
+            categoryList.add(name)
+            Log.d("DatabaseHelper", "Category found: $name")
         }
 
         cursor.close()
         db.close()
         return categoryList
+
+        fun insertCategory(userId: Int, name: String): Boolean {
+            val db = writableDatabase
+            val values = ContentValues().apply {
+                put("user_id", userId)
+                put("name", name)
+            }
+            val result = db.insert("categories", null, values)
+            db.close()
+            return result != -1L
+        }
+
     }
+
 
     companion object {
         const val DATABASE_NAME = "TimeNestDB"

@@ -28,7 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_input" />
+        android:background="@drawable/rounded_input"
+        android:spinnerMode="dropdown"/>
 
     <!-- Start Date -->
     <TextView
